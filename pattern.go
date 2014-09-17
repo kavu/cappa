@@ -30,6 +30,6 @@ func NewPattern(s string) (*pattern, error) {
 	return &pattern{r}, nil
 }
 
-func (pattern *pattern) MatchUA(s string) bool {
-	return pattern.Re.MatchString(strings.ToLower(s))
+func (pattern *pattern) match(s string) bool {
+	return pattern.Re.MatchString(s)
 }

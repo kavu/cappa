@@ -1,26 +1,5 @@
 package cappa
 
-import (
-	"encoding/csv"
-	"os"
-)
-
-type UAs []*UA
-
-func (uas UAs) Matches(s string) UAs {
-	matchedUAs := make(UAs, 0)
-
-	for _, ua := range uas {
-		if ua != nil {
-			if ua.Match(s) {
-				matchedUAs = append(matchedUAs, ua)
-			}
-		}
-	}
-
-	return matchedUAs
-}
-
 type UA struct {
 	Pattern             *pattern
 	PropertyName        string
@@ -57,21 +36,13 @@ type UA struct {
 	AolVersion          string
 }
 
-func (ua *UA) Match(s string) bool {
-	if ua.Pattern == nil {
-		pattern, err := NewPattern(ua.PropertyName)
-		if err != nil {
-			panic(err)
-		}
-
-		ua.Pattern = pattern
+func NewUAFromLine(line []string) *UA {
+	pattern, err := NewPattern(line[0])
+	if err != nil {
+		panic(err)
 	}
 
-	return ua.Pattern.MatchUA(s)
-}
-
-func NewUAFromLine(line []string) *UA {
-	ua := &UA{}
+	ua := &UA{Pattern: pattern}
 
 	ua.PropertyName = line[0]
 	ua.AgentID = line[1]
@@ -107,24 +78,4 @@ func NewUAFromLine(line []string) *UA {
 	ua.AolVersion = line[21]
 
 	return ua
-}
-
-func ReadUAsFromCSV(f string) UAs {
-	r, err := os.Open(f)
-	if err != nil {
-		panic(err)
-	}
-	defer r.Close()
-
-	data, err := csv.NewReader(r).ReadAll()
-	if err != nil {
-		panic(err)
-	}
-
-	uas := make(UAs, len(data))
-	for i, line := range data {
-		uas[i] = NewUAFromLine(line)
-	}
-
-	return uas
 }
