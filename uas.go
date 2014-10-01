@@ -46,11 +46,13 @@ func (uas UAs) Matches(s string) UAs {
 
 func (uas UAs) TopMatch(s string) *UA {
 	s = strings.ToLower(s)
+	m := uas.Matches(s)
 
-	q := &matchQuery{
-		ua:  s,
-		uas: uas.Matches(s),
+	if len(m) < 1 {
+		return nil
 	}
+
+	q := &matchQuery{ua: s, uas: m}
 
 	sort.Sort(q)
 
