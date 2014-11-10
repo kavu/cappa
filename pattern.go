@@ -1,3 +1,7 @@
+// Copyright 2014 Max Riveiro. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package cappa
 
 import (
@@ -9,12 +13,15 @@ var (
 	sanitizitaionRegexp = regexp.MustCompile("([\\^\\$\\(\\)\\[\\]\\.\\-\\+\\\\])")
 )
 
-type pattern struct {
-	Re *regexp.Regexp
+// Pattern is just a wrapper of regexp.Regexp. The reason why this thing exists
+// is the NewPattern function, that does some preprocessing of Pattern String.
+type Pattern struct {
+	re *regexp.Regexp
 }
 
-func NewPattern(s string) (*pattern, error) {
-	var ns = strings.ToLower(s)
+// NewPattern preprocessed, creates and returns new Pattern used for Match.
+func NewPattern(s string) (*Pattern, error) {
+	ns := strings.ToLower(s)
 
 	ns = sanitizitaionRegexp.ReplaceAllString(ns, "\\$1")
 	ns = strings.Replace(ns, "?", ".", -1)
@@ -23,13 +30,14 @@ func NewPattern(s string) (*pattern, error) {
 
 	r, err := regexp.Compile(ns)
 	if err != nil {
-		println(ns)
 		return nil, err
 	}
 
-	return &pattern{r}, nil
+	return &Pattern{r}, nil
 }
 
-func (pattern *pattern) match(s string) bool {
-	return pattern.Re.MatchString(s)
+// Match is a wrapper over the MatchString function of *regexp.Regexp. Also
+// some incoming string preprocessing.
+func (pattern *Pattern) Match(s string) bool {
+	return pattern.re.MatchString(strings.ToLower(s))
 }

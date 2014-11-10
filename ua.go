@@ -1,9 +1,15 @@
+// Copyright 2014 Max Riveiro. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package cappa
 
+// UA contains all Browscap properties along with the Pattern structure, that
+// used to be matched against. Most of the properties are self-describing, but
+// you may consult with Browscap http://browscap.org/.
 type UA struct {
-	Pattern      *pattern
-	PropertyName string
-	// AgentID             string
+	Pattern             *Pattern
+	PropertyName        string
 	MasterParent        string
 	LiteMode            string
 	Parent              string
@@ -13,7 +19,7 @@ type UA struct {
 	MajorVer            string
 	MinorVer            string
 	Platform            string
-	Platform_Version    string
+	PlatformVersion     string
 	Alpha               string
 	Beta                string
 	Win16               string
@@ -32,10 +38,12 @@ type UA struct {
 	IsTablet            string
 	IsSyndicationReader string
 	Crawler             string
-	CssVersion          string
+	CSSVersion          string
 	AolVersion          string
 }
 
+// NewUAFromLine creates a User-Agent from the slice of strings, that
+// represents a parsed and separated line of the CSV file.
 func NewUAFromLine(line []string) *UA {
 	pattern, err := NewPattern(line[0])
 	if err != nil {
@@ -54,7 +62,7 @@ func NewUAFromLine(line []string) *UA {
 	ua.MajorVer = line[7]
 	ua.MinorVer = line[8]
 	ua.Platform = line[9]
-	ua.Platform_Version = line[10]
+	ua.PlatformVersion = line[10]
 	ua.Alpha = line[11]
 	ua.Beta = line[12]
 	ua.Win16 = line[13]
@@ -73,7 +81,7 @@ func NewUAFromLine(line []string) *UA {
 	ua.IsTablet = line[26]
 	ua.IsSyndicationReader = line[27]
 	ua.Crawler = line[28]
-	ua.CssVersion = line[29]
+	ua.CSSVersion = line[29]
 	ua.AolVersion = line[30]
 
 	return ua

@@ -1,3 +1,7 @@
+// Copyright 2014 Max Riveiro. All rights reserved.
+// Use of this source code is governed by a MIT
+// license that can be found in the LICENSE file.
+
 package cappa
 
 import (
@@ -9,7 +13,25 @@ const (
 	patternString = "Mozilla/5.0 (*Mac OS X 10_10*) AppleWebKit/* (KHTML, like Gecko)*Chrome/*Safari/*OPR/16.0*"
 )
 
-func BenchmarkPattrenNewPattern(b *testing.B) {
+func TestNewPattern(t *testing.T) {
+	_, err := NewPattern(patternString)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMatch(t *testing.T) {
+	p, err := NewPattern(patternString)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if !p.Match(patternString) {
+		t.Error("Pattern did not match")
+	}
+}
+
+func BenchmarkNewPattern(b *testing.B) {
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			_, err := NewPattern(patternString)
@@ -20,7 +42,7 @@ func BenchmarkPattrenNewPattern(b *testing.B) {
 	})
 }
 
-func BenchmarkPattrenMatch(b *testing.B) {
+func BenchmarkMatch(b *testing.B) {
 	p, err := NewPattern(patternString)
 	if err != nil {
 		b.Error(err)
@@ -30,7 +52,7 @@ func BenchmarkPattrenMatch(b *testing.B) {
 
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			if !p.match(uaString) {
+			if !p.Match(uaString) {
 				b.Error("Broken!")
 			}
 		}
