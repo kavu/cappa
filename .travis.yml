@@ -6,3 +6,4 @@ go:
 
 script:
   - go test -v ./...
+  - go test -cpu 1,2,4 -benchmem -bench=.
