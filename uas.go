@@ -49,8 +49,11 @@ func ReadUAsFromCSV(f string) UAs {
 // Matches returns all the matched User-Agents for the given User-Agent string.
 // In could be empty.
 func (uas UAs) Matches(s string) UAs {
-	matchedUAs := make(UAs, 0)
+	if matches, ok := matchesCache.Get(s); ok {
+		return matches.(UAs)
+	}
 
+	matchedUAs := make(UAs, 0)
 	for _, ua := range uas {
 		if ua != nil {
 			if ua.Pattern.Match(s) {
@@ -59,6 +62,8 @@ func (uas UAs) Matches(s string) UAs {
 		}
 	}
 
+	matchesCache.Add(s, matchedUAs)
+
 	return matchedUAs
 }
 
@@ -66,15 +71,19 @@ func (uas UAs) Matches(s string) UAs {
 // the lengths of User-Agent Pattern and User-Agent String as the parameter for
 // comparing.
 func (uas UAs) TopMatch(s string) *UA {
-	m := uas.Matches(s)
+	if match, ok := topMatchesCache.Get(s); ok {
+		return match.(*UA)
+	}
 
+	m := uas.Matches(s)
 	if len(m) < 1 {
 		return nil
 	}
 
 	q := &matchQuery{ua: s, uas: m}
-
 	sort.Sort(q)
+
+	topMatchesCache.Add(s, q.uas[0])
 
 	return q.uas[0]
 }
