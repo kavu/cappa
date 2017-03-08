@@ -11,6 +11,11 @@ go:
   - 1.8
   - tip
 
+env:
+  - DB_URL="http://browscap.org/stream?q=BrowsCapCSV"
+  - DB_PATH=test/browscap.csv
+
 script:
-  - go test -v ./...
-  - go test -cpu 1,2,4,8 -run=NONE -benchmem -bench=.
+  - wget $DB_URL -O $DB_PATH
+  - sed -i '1,4d' $DB_PATH
+  - go test -v cpu 1,8 -benchmem -bench=.
