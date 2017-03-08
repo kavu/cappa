@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	sanitizitaionRegexp = regexp.MustCompile("([\\^\\$\\(\\)\\[\\]\\.\\-\\+\\\\])")
+	sanitizitaionRegexp = regexp.MustCompile(`([\^\$\(\)\[\]\.\-\+\\])`)
 )
 
 // Pattern is just a wrapper of regexp.Regexp. The reason why this thing exists

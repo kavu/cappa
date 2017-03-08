@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	sanitizitaionRegexpSimple = regexp.MustCompile("([\\*\\?])")
+	sanitizitaionRegexpSimple = regexp.MustCompile(`([\*\?])`)
 )
 
 type matchQuery struct {

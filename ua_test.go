@@ -8,30 +8,32 @@ import (
 	"testing"
 )
 
-func BenchmarkUAsMatches(b *testing.B) {
+func BenchmarkUAsMatchesWithCacheWarm(b *testing.B) {
 	patterns := ReadUAsFromCSV("test/browscap.csv")
 	patterns.Matches(uaString)
 	b.ResetTimer()
 
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			if len(patterns.Matches(uaString)) < 1 {
-				b.Error("Broken!")
+			numMatches := len(patterns.Matches(uaString))
+
+			if numMatches < 1 {
+				b.Errorf("num matches is %d, expected to be =< 1", numMatches)
 			}
 		}
 	})
 }
 
-func BenchmarkUAsTopMatch(b *testing.B) {
-	expected := "Mozilla/5.0 (*Mac OS X 10_10*) AppleWebKit/* (KHTML, like Gecko)*Chrome/*Safari/*OPR/16.0*"
+func BenchmarkUAsTopMatchWithCacheWarm(b *testing.B) {
 	patterns := ReadUAsFromCSV("test/browscap.csv")
-	patterns.Matches(uaString)
+	patterns.TopMatch(uaString)
 	b.ResetTimer()
 
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			if patterns.TopMatch(uaString).PropertyName != expected {
-				b.Error("Broken!")
+			property := patterns.TopMatch(uaString).PropertyName
+			if property != patternString {
+				b.Errorf("expected %s, got %s", patternString, property)
 			}
 		}
 	})

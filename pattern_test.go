@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	uaString      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36 OPR/16.0.1196.80"
-	patternString = "Mozilla/5.0 (*Mac OS X 10_10*) AppleWebKit/* (KHTML, like Gecko)*Chrome/*Safari/*OPR/16.0*"
+	uaString      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
+	patternString = "Mozilla/5.0 (*Mac OS X*) AppleWebKit/* (KHTML* like Gecko) Chrome/56.*Safari/*"
 )
 
 func TestNewPattern(t *testing.T) {
@@ -26,8 +26,8 @@ func TestMatch(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !p.Match(patternString) {
-		t.Error("Pattern did not match")
+	if !p.Match(uaString) {
+		t.Errorf("pattern %s did not match agent %s", patternString, uaString)
 	}
 }
 
@@ -47,7 +47,6 @@ func BenchmarkMatch(b *testing.B) {
 	if err != nil {
 		b.Error(err)
 	}
-
 	b.ResetTimer()
 
 	b.RunParallel(func(pb *testing.PB) {
