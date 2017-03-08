@@ -3,6 +3,9 @@ sudo: false
 language: go
 
 go:
+  - 1.0
+  - 1.1
+  - 1.2
   - 1.3
   - 1.4
   - 1.5
@@ -18,16 +21,14 @@ env:
   global:
     - DB_URL="http://browscap.org/stream?q=BrowsCapCSV"
     - DB_PATH=test/browscap.csv
+  matrix:
+    - CPU=8
 
 script:
   - wget $DB_URL -O $DB_PATH
   - sed -i '1,80004d' $DB_PATH
-  - go test -v -cpu=1,8 -benchmem -bench=.
+  - go test -v -cpu=$CPU -benchmem -bench=.
 
 matrix:
-  allow_failures:
-    - go: 1.3
-    - go: 1.4
-    - go: 1.5
-    - go: 1.6
+  allows_failures:
     - go: tip
