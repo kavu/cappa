@@ -30,5 +30,5 @@ script:
   - go test -v -cpu=$CPU -benchmem -bench=.
 
 matrix:
-  allows_failures:
+  allow_failures:
     - go: tip
