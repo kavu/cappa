@@ -17,13 +17,14 @@ os:
 env:
   global:
     - DB_URL="http://browscap.org/stream?q=BrowsCapCSV"
+    - TMP_PATH=test/tmp.csv
     - DB_PATH=test/browscap.csv
   matrix:
     - CPU=8
 
 script:
-  - wget $DB_URL -O $DB_PATH
-  - sed -i '1,80004d' $DB_PATH
+  - wget $DB_URL -O $TMP_PATH
+  - sed '1,106000d' test/tmp.csv | head -300 > $DB_PATH
   - go test -v -cpu=$CPU -benchmem -bench=.
 
 matrix:
