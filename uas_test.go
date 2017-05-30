@@ -27,10 +27,17 @@ func TestMatches(t *testing.T) {
 
 func TestTopMatch(t *testing.T) {
 	patterns := ReadUAsFromCSV("test/browscap.csv")
-	property := patterns.TopMatch(uaString).PropertyName
+	match := patterns.TopMatch(uaString)
 
-	if property != patternString {
-		t.Errorf("expected %s, got %s", patternString, property)
+	if match != nil {
+		property := match.PropertyName
+
+		if property != patternString {
+			t.Errorf("expected %s, got %s", patternString, property)
+		}
+	} else {
+		t.Errorf("expected match to be non-nil")
+
 	}
 }
 
