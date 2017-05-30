@@ -10,7 +10,7 @@ import (
 
 const (
 	uaString      = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
-	patternString = "Mozilla/5.0 (*Mac OS X*) AppleWebKit/* (KHTML* like Gecko) Chrome/56.*Safari/*"
+	patternString = "Mozilla/5.0 (*Mac OS X 10?12*) applewebkit* (*khtml*like*gecko*) Chrome/56.*Safari/*"
 )
 
 func TestNewPattern(t *testing.T) {
