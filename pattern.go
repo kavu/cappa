@@ -9,17 +9,15 @@ import (
 	"strings"
 )
 
-var (
-	sanitizitaionRegexp = regexp.MustCompile(`([\^\$\(\)\[\]\.\-\+\\])`)
-)
+var sanitizitaionRegexp = regexp.MustCompile(`([\^\$\(\)\[\]\.\-\+\\])`)
 
-// Pattern is just a wrapper of regexp.Regexp. The reason why this thing exists
-// is the NewPattern function, that does some preprocessing of Pattern String.
+// Pattern is just a wrapper for regexp.Regexp. The reason why this thing exists
+// is the NewPattern function, that does some preprocessing of a pattern string.
 type Pattern struct {
 	re *regexp.Regexp
 }
 
-// NewPattern preprocessed, creates and returns new Pattern used for Match.
+// NewPattern preprocesses, creates and returns new Pattern used for Match.
 func NewPattern(s string) (*Pattern, error) {
 	ns := strings.ToLower(s)
 
@@ -36,8 +34,8 @@ func NewPattern(s string) (*Pattern, error) {
 	return &Pattern{r}, nil
 }
 
-// Match is a wrapper over the MatchString function of *regexp.Regexp. Also
-// some incoming string preprocessing.
+// Match is a wrapper over the MatchString function of *regexp.Regexp but it
+// does some preprocessing over incoming string.
 func (pattern *Pattern) Match(s string) bool {
 	return pattern.re.MatchString(strings.ToLower(s))
 }
