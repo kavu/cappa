@@ -25,7 +25,7 @@ env:
     - CPU=1
     - CPU=8
 
-script: ./test.sh
+script: ./test.bash
 
 matrix:
   allow_failures:
