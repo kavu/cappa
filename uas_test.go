@@ -44,7 +44,7 @@ func TestTopMatch(t *testing.T) {
 func BenchmarkReadUAsFromCSV(b *testing.B) {
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			patterns := ReadUAsFromCSV("test/tmp.csv")
+			patterns := ReadUAsFromCSV("test/browscap.csv")
 
 			if len(patterns) < 1 {
 				b.Errorf("num UAs is %d, expected to be >= 1", len(patterns))
